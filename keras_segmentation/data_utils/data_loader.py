@@ -153,7 +153,8 @@ def get_image_array(image_input,
         img = img.astype(np.float32)
         img = np.atleast_3d(img)
 
-        means = [103.939, 116.779, 123.68]
+        #means = [103.939, 116.779, 123.68] #CHANGED
+        means = [np.mean(img[:,:,0]), np.mean(img[:,:,1]), np.mean(img[:,:,2])]
 
         for i in range(min(img.shape[2], len(means))):
             img[:, :, i] -= means[i]
@@ -217,6 +218,8 @@ def verify_segmentation_dataset(images_path, segs_path,
             # Check dimensions match
             if not img.shape == seg.shape:
                 return_value = False
+                print(img.shape)
+                print(seg.shape)
                 print("The size of image {0} and its segmentation {1} "
                       "doesn't match (possibly the files are corrupt)."
                       .format(im_fn, seg_fn))

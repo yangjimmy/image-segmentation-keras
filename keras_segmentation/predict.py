@@ -144,6 +144,7 @@ def predict(model=None, inp=None, out_fname=None,
 
     if isinstance(inp, six.string_types):
         inp = cv2.imread(inp, read_image_type)
+        print(inp.shape)
 
     assert (len(inp.shape) == 3 or len(inp.shape) == 1 or len(inp.shape) == 4), "Image should be h,w,3 "
 
@@ -155,6 +156,7 @@ def predict(model=None, inp=None, out_fname=None,
 
     x = get_image_array(inp, input_width, input_height,
                         ordering=IMAGE_ORDERING)
+    
     pr = model.predict(np.array([x]))[0]
     pr = pr.reshape((output_height,  output_width, n_classes)).argmax(axis=2)
 

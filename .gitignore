@@ -106,3 +106,11 @@ ENV/
 
 # VSCode settings
 .vscode/
+
+# misc
+dataset1.zip
+read_img.py
+read_model3.py
+read_model4.py
+read_model5.py
+log.txt
