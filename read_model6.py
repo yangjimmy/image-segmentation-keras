@@ -11,6 +11,7 @@ import time
 import scipy.io
 import shutil
 import os
+from PIL import Image
 
 #TODO: read in .raw file -> actual files in OCT
     # scaled intensity values
@@ -136,16 +137,18 @@ def run_test(inp_array):
 
 
 def read_bscan(img_arr):
-    raw_file = np.reshape(img_arr,(800,1024))
-    raw_file = raw_file[0:400,:]
-    raw_file = np.clip(raw_file, 20, 70, out=raw_file)
-    raw_file = (raw_file - 20) / 50
-    raw_file = raw_file.T
+    # raw_file = np.reshape(img_arr,(800,1024))
+    # raw_file = raw_file[0:400,:]
+    # raw_file = np.clip(raw_file, 20, 70, out=raw_file)
+    # raw_file = (raw_file - 20) / 50
+    # raw_file = raw_file.T
+    
+    # raw_file_resized = cv2.resize(raw_file, (640,376)) # np dimensions: 376, 640
 
-    raw_file_resized = cv2.resize(raw_file, (640,376))
-    raw_file_resized = 255 * raw_file_resized
+    raw_file_resized = img_arr # TEMPORARY, TO BE REMOVED
+    # raw_file_resized = 255 * raw_file_resized
 
-    plt.imshow(raw_file_resized)
+    # plt.imshow(raw_file_resized)
     
     return raw_file_resized.astype(np.uint8)
 
@@ -179,22 +182,45 @@ def read_bscan(img_arr):
 #     plt.imshow(img)
 #     plt.show()
 
+#TODO: need to train this again on the new GPU
 if __name__ == '__main__':
-    with open("E:\\MSR2\\SAVES\\20240417\\BSCAN_65267268.raw", 'rb') as f:
-        raw_file = np.fromfile(f, dtype=np.float32)
     initialize()
-    # for i in range(10000):
-    # raw_file_ = read_bscan(raw_file)
+    root = "Z:\Jimmy Data\image-segmentation-keras\mia data\\bscans"
+    out_dir = "out"
+    files = os.listdir(root)
+    fpath = os.path.join(root, files[200])
+    raw_file = np.asarray(Image.open(fpath))
+    plt.show()
     out = run_test(raw_file)
-    scipy.io.savemat("E:\\MSR2\\SAVES\\20240417\\BSCAN_65267268.mat", {'img': out})
-
+    # for f in files:
+    #     if f.split(".")[-1] != "png":
+    #         continue
+    #     fpath = os.path.join(root, f)
+    #     raw_file = np.asarray(Image.open(fpath))
+    #     out = run_test(raw_file)
+    #     scipy.io.savemat(os.path.join(root,out_dir,f.split(".")[0]+".mat"), {'img': out})
     plt.figure()
     plt.imshow(out)
-    # plt.figure()
-    # plt.imshow(cv2.imread("C:\\Users\\Computer\\Documents\\GitHub\\image-segmentation-keras\\VSCAN_0027_190.png"))
     plt.show()
 
-    # labels: 1 = cornea; 2 = sclera; 3 = retina; 4 = background
+
+
+# if __name__ == '__main__':
+#     with open("E:\\MSR2\\SAVES_V2\\20240417\\BSCAN_65267268.raw", 'rb') as f:
+#         raw_file = np.fromfile(f, dtype=np.float32)
+#     initialize()
+#     # for i in range(10000):
+#     # raw_file_ = read_bscan(raw_file)
+#     out = run_test(raw_file)
+#     scipy.io.savemat("E:\\MSR2\\SAVES_V2\\20240417\\BSCAN_65267268.mat", {'img': out})
+
+#     plt.figure()
+#     plt.imshow(out)
+#     # plt.figure()
+#     # plt.imshow(cv2.imread("C:\\Users\\Computer\\Documents\\GitHub\\image-segmentation-keras\\VSCAN_0027_190.png"))
+#     plt.show()
+
+#     # labels: 1 = cornea; 2 = sclera; 3 = retina; 4 = background
 
 
 # if __name__ == '__main__':

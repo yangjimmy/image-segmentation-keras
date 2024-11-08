@@ -29,22 +29,22 @@ try:
 except:
     pass
 
-fp = open('models/modelP_unet_vgg_1_epoch.json','w')
+fp = open('models/modelP_dental.json','w')
 fp.write(model_json)
-model.save_weights('models/modelW_unet_vgg_1_epoch.h5')
+model.save_weights('models/modelW_dental.h5')
 
 # TODO: reload model from saved weights here
 # model2 = load_json_model('models/modelP_unet_vgg_1_epoch.json')
 model2 = vgg_unet(n_classes=5,  input_height=352, input_width=384)
 
 
-model2.load_weights('models/modelW_unet_vgg_1_epoch.h5')
+model2.load_weights('models/modelW_dental.h5')
 
 # try on test data
 start = time.time()
 out = model2.predict_segmentation(
     inp="dataset2\\test_images\\scan27_1_VSCAN_0027_190.png",
-    out_fname="tmp\\out_unet_epochs_1.png"
+    out_fname="tmp\\out_dental_epochs_1.png"
 )
 print(out.shape)
 # prrint()
